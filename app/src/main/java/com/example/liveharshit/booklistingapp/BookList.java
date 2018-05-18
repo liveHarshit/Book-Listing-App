@@ -4,15 +4,15 @@ import android.graphics.Bitmap;
 
 public class BookList {
 
-    private Bitmap mBmp;
+    private String mImageurl;
     private String mTitle;
     private String mAuthor;
     private String mPreviewUrl;
     private String mDownloadAvailable;
     private String mDownloadOrViewUrl;
 
-    public BookList (Bitmap bmp,String title, String author, String previewUrl, String downloadAvailable, String downloadOrViewUrl) {
-        mBmp = bmp;
+    public BookList (String imageUrl,String title, String author, String previewUrl, String downloadAvailable, String downloadOrViewUrl) {
+        mImageurl = imageUrl;
         mTitle = title;
         mAuthor = author;
         mPreviewUrl = previewUrl;
@@ -20,7 +20,7 @@ public class BookList {
         mDownloadOrViewUrl = downloadOrViewUrl;
     }
 
-    public Bitmap getBmp () {return mBmp;}
+    public String getImageUrl () {return mImageurl;}
     public String getTitle () {return mTitle;}
     public String getAuthor () {return mAuthor;}
     public String getPreviewUrl () {return mPreviewUrl;}
