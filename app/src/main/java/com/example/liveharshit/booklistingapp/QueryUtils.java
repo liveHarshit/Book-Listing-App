@@ -776,7 +776,7 @@ public class QueryUtils {
                 String downloadOrViewUrl;
                 String downloadAvailable;
 
-                if(downloadInfo.optString("downloadLink")!=null) {
+                if(downloadInfo.has("downloadLink")) {
                     downloadAvailable = "YES";
                     downloadOrViewUrl = downloadInfo.getString("downloadLink");
                 } else {
