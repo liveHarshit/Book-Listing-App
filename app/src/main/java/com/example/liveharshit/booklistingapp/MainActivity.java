@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.io.InputStream;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private static final String GOOGLEAPI_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=";
     private BookListAdapter adapter;
 
     @Override
@@ -28,34 +31,41 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button searchButton = (Button) findViewById(R.id.search_button);
+        final EditText searchKeyword = (EditText)findViewById(R.id.keyword_text);
         ListView listView = (ListView)findViewById(R.id.list);
         adapter = new BookListAdapter(this,new ArrayList<BookList>());
         listView.setAdapter(adapter);
 
-//        ArrayList<BookList> bookLists = QueryUtils.extractBookList();
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String keyword = String.valueOf(searchKeyword.getText());
+                keyword = keyword.replaceAll(" ","+");
+                String JSON_RESPONSE_URL = GOOGLEAPI_REQUEST_URL+keyword+":keyes&key=AIzaSyBUVkZKlvaQJdnqVlxXkkL6ca1iaaxTzlg";
+                Log.e("Final url",JSON_RESPONSE_URL);
+                BookListAsyncTask asyncTask = new BookListAsyncTask();
+                asyncTask.execute(JSON_RESPONSE_URL);
 
-//        BookListAdapter adapter = new BookListAdapter(this,bookLists);
-
-
-        BookListAsyncTask asyncTask = new BookListAsyncTask();
-        asyncTask.execute();
-
+            }
+        });
 
     }
 
-    private class BookListAsyncTask extends AsyncTask<Void,Void,ArrayList<BookList>> {
-
+    private class BookListAsyncTask extends AsyncTask <String,Void,ArrayList<BookList>> {
 
         @Override
-        protected ArrayList<BookList> doInBackground(Void... voids) {
-            ArrayList<BookList> bookLists = QueryUtils.extractBookList();
+        protected ArrayList<BookList> doInBackground(String... strings) {
+            ArrayList<BookList> bookLists = QueryUtils.fetchBookListData(strings[0]);
             return bookLists;
         }
 
         @Override
         protected void onPostExecute(ArrayList<BookList> bookLists) {
-            adapter.addAll(bookLists);
-
+            adapter.clear();
+            if(bookLists!=null&&!bookLists.isEmpty()) {
+                adapter.addAll(bookLists);
+            }
         }
     }
 
