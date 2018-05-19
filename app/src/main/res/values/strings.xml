@@ -7,5 +7,6 @@
     <string name="author">Author: </string>
     <string name="preview">Preview on Google Books</string>
     <string name="download_available">PDF Download available: </string>
-    <string name="click_to_download">Click here to download</string>
+    <string name="click_to_download">Click here to download pdf.</string>
+    <string name="click_to_read">Click here for web reader.</string>
 </resources>
