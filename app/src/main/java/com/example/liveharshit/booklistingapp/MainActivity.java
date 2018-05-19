@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String keyword = String.valueOf(searchKeyword.getText());
                 keyword = keyword.replaceAll(" ","+");
-                String JSON_RESPONSE_URL = GOOGLEAPI_REQUEST_URL+keyword+":keyes&key=AIzaSyBUVkZKlvaQJdnqVlxXkkL6ca1iaaxTzlg";
+                String JSON_RESPONSE_URL = GOOGLEAPI_REQUEST_URL+keyword;
                 Log.e("Final url",JSON_RESPONSE_URL);
                 BookListAsyncTask asyncTask = new BookListAsyncTask();
                 asyncTask.execute(JSON_RESPONSE_URL);
