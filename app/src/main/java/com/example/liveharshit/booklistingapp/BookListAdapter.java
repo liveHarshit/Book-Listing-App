@@ -7,9 +7,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.EventLogTags;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,19 +98,22 @@ public class BookListAdapter extends ArrayAdapter<BookList> {
 
         Glide.with(getContext()).load(imageUrl).into(imageView);
 
-        /*Button description_button = (Button)listItemView.findViewById(R.id.description);
-        String description = currentBookList.getDescription();
+        Button description_button = (Button)listItemView.findViewById(R.id.description_button);
+        final String description = currentBookList.getDescription();
         description_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getContext(),descriptionActivity.class);
+                Intent i = new Intent(getContext(), DescriptionActivity.class);
+                i.putExtra("description",description);
                 getContext().startActivity(i);
             }
-        });*/
+        });
 
         return listItemView;
 
     }
+
+
 }
 
 
