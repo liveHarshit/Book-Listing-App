@@ -105,6 +105,7 @@ public class BookListAdapter extends ArrayAdapter<BookList> {
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), DescriptionActivity.class);
                 i.putExtra("description",description);
+                i.putExtra("title",currentBookList.getTitle());
                 getContext().startActivity(i);
             }
         });

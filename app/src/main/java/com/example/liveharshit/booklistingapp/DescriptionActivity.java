@@ -25,13 +25,17 @@ public class DescriptionActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String description;
+        String description,title;
         Bundle bundle = getIntent().getExtras();
-        description = bundle.getString("description");
-        Log.e("Description",description);
 
+        description = bundle.getString("description");
         TextView descriptionTextView = (TextView)findViewById(R.id.description_text_view);
         descriptionTextView.setText(description);
+
+        title = bundle.getString("title");
+        TextView titleTextView = (TextView)findViewById(R.id.title_text_view);
+        titleTextView.setText(title);
+
 
     }
 }
