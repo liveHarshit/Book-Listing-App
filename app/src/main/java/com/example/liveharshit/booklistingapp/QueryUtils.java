@@ -110,6 +110,12 @@ public class QueryUtils {
                 } else {
                     author_name = "Not available!";
                 }
+                String description;
+                if(volumeInfo.has("description")) {
+                    description = volumeInfo.getString("description");
+                } else {
+                    description = "Sorry, Description is not available!";
+                }
                 String preview_url = volumeInfo.getString("previewLink");
                 JSONObject accessInfo = currentBook.getJSONObject("accessInfo");
                 JSONObject downloadInfo = accessInfo.getJSONObject("pdf");
@@ -131,7 +137,7 @@ public class QueryUtils {
                     imageUrl = "http://www.richardsalter.com/wp-content/uploads/2011/07/Cover-not-available.jpg";
                 }
 
-                BookList bookList = new BookList(imageUrl,title,author_name,preview_url,downloadAvailable,downloadOrViewUrl);
+                BookList bookList = new BookList(imageUrl,title,author_name,preview_url,downloadAvailable,downloadOrViewUrl,description);
                 bookLists.add(bookList);
 
             }

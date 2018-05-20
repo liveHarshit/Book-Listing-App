@@ -46,10 +46,10 @@ public class MainActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 progressBar = (ProgressBar)findViewById(R.id.progress_bar);
                 TextView textView = (TextView)findViewById(R.id.empty_view);
                 textView.setText(null);
+                adapter.clear();
                 progressBar.setVisibility(View.VISIBLE);
                 String keyword = String.valueOf(searchKeyword.getText());
                 keyword = keyword.replaceAll(" ","+");
@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private class BookListAsyncTask extends AsyncTask <String,Void,ArrayList<BookList>> {

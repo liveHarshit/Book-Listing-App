@@ -93,6 +93,16 @@ public class BookListAdapter extends ArrayAdapter<BookList> {
 
         Glide.with(getContext()).load(imageUrl).into(imageView);
 
+        /*Button description_button = (Button)listItemView.findViewById(R.id.description);
+        String description = currentBookList.getDescription();
+        description_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(),descriptionActivity.class);
+                getContext().startActivity(i);
+            }
+        });*/
+
         return listItemView;
 
     }
