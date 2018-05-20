@@ -1,8 +1,11 @@
 package com.example.liveharshit.booklistingapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -25,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String GOOGLEAPI_REQUEST_URL = "https://www.googleapis.com/books/v1/volumes?q=";
     private BookListAdapter adapter;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +46,28 @@ public class MainActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                progressBar = (ProgressBar)findViewById(R.id.progress_bar);
+                TextView textView = (TextView)findViewById(R.id.empty_view);
+                textView.setText(null);
+                progressBar.setVisibility(View.VISIBLE);
                 String keyword = String.valueOf(searchKeyword.getText());
                 keyword = keyword.replaceAll(" ","+");
                 String JSON_RESPONSE_URL = GOOGLEAPI_REQUEST_URL+keyword;
                 Log.e("Final url",JSON_RESPONSE_URL);
-                BookListAsyncTask asyncTask = new BookListAsyncTask();
-                asyncTask.execute(JSON_RESPONSE_URL);
+
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+                if(networkInfo!=null&&networkInfo.isConnected()) {
+
+                    BookListAsyncTask asyncTask = new BookListAsyncTask();
+                    asyncTask.execute(JSON_RESPONSE_URL);
+                } else {
+                    textView.setText("No internet connection");
+                    progressBar.setVisibility(View.INVISIBLE);
+
+                }
 
             }
         });
@@ -64,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<BookList> bookLists) {
             adapter.clear();
             if(bookLists!=null&&!bookLists.isEmpty()) {
+                progressBar = (ProgressBar)findViewById(R.id.progress_bar);
+                progressBar.setVisibility(View.GONE);
                 adapter.addAll(bookLists);
             }
         }

@@ -25,8 +25,8 @@ public class QueryUtils {
 
     }
 
-    public static ArrayList<BookList> fetchBookListData (String reuestUrl) {
-        URL url = createUrl(reuestUrl);
+    public static ArrayList<BookList> fetchBookListData (String requestUrl) {
+        URL url = createUrl(requestUrl);
         String jsonResponse = null;
         try {
             jsonResponse = makeHTTPRequest(url);
@@ -123,9 +123,13 @@ public class QueryUtils {
                     downloadAvailable = "NO";
                     downloadOrViewUrl = accessInfo.getString("webReaderLink");
                 }
-
-                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                String imageUrl = imageLinks.getString("smallThumbnail");
+                String imageUrl;
+                if (volumeInfo.has("imageLinks")) {
+                    JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
+                    imageUrl = imageLinks.getString("smallThumbnail");
+                } else {
+                    imageUrl = "http://www.richardsalter.com/wp-content/uploads/2011/07/Cover-not-available.jpg";
+                }
 
                 BookList bookList = new BookList(imageUrl,title,author_name,preview_url,downloadAvailable,downloadOrViewUrl);
                 bookLists.add(bookList);

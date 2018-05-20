@@ -19,19 +19,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class BookListAdapter extends ArrayAdapter<BookList> {
-
-    Bitmap imageBitmap = null;
 
     public BookListAdapter(Context context,List<BookList> objects) {
         super(context, 0, objects);
@@ -88,76 +91,11 @@ public class BookListAdapter extends ArrayAdapter<BookList> {
 
         String imageUrl = currentBookList.getImageUrl();
 
-        URL url = createUrl(imageUrl);
-
-        ImageAsyncTask task = new ImageAsyncTask();
-        task.execute(url);
-
-        imageView.setImageBitmap(imageBitmap);
-
+        Glide.with(getContext()).load(imageUrl).into(imageView);
 
         return listItemView;
 
     }
-
-
-    private static URL createUrl(String stringUrl){
-        URL url = null;
-        try {
-            url = new URL(stringUrl);
-        } catch (MalformedURLException e) {
-            Log.e("","Invalid Url");
-        }
-        return url;
-    }
-
-    private static Bitmap makeHTTPrequest(URL url) throws IOException {
-        Bitmap bmp = null;
-        if (url == null) {
-            return bmp;
-        }
-        HttpURLConnection urlConnection = null;
-        InputStream inputStream = null;
-
-        try {
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000);
-            urlConnection.setConnectTimeout(15000);
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
-            if (urlConnection.getResponseCode() == 200) {
-                inputStream = urlConnection.getInputStream();
-                bmp = BitmapFactory.decodeStream(inputStream);
-            } else {
-                Log.e("", "Invalid Request");
-            }
-
-        } catch (IOException e) {
-            Log.e("", "Problem reverting image bitmap", e);
-        }
-
-        return bmp;
-    }
-
-    private class ImageAsyncTask extends AsyncTask<URL,Void,Bitmap> {
-
-        @Override
-        protected Bitmap doInBackground(URL... urls) {
-            Bitmap imageBitmap = null;
-            try {
-                imageBitmap = makeHTTPrequest(urls[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return imageBitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            imageBitmap = bitmap;
-        }
-    }
-
 }
 
 
