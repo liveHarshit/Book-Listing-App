@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -46,31 +48,58 @@ public class MainActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar = (ProgressBar)findViewById(R.id.progress_bar);
-                TextView textView = (TextView)findViewById(R.id.empty_view);
+                progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+                TextView textView = (TextView) findViewById(R.id.empty_view);
                 textView.setText(null);
                 adapter.clear();
                 progressBar.setVisibility(View.VISIBLE);
                 String keyword = String.valueOf(searchKeyword.getText());
-                keyword = keyword.replaceAll(" ","+");
-                String JSON_RESPONSE_URL = GOOGLEAPI_REQUEST_URL+keyword;
-                Log.e("Final url",JSON_RESPONSE_URL);
+                keyword = keyword.replaceAll(" ", "+");
+                if (!keyword.isEmpty()) {
+                    String JSON_RESPONSE_URL = GOOGLEAPI_REQUEST_URL + keyword;
+                    Log.e("Final url", JSON_RESPONSE_URL);
 
-                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-                if(networkInfo!=null&&networkInfo.isConnected()) {
+                    if (networkInfo != null && networkInfo.isConnected()) {
 
-                    BookListAsyncTask asyncTask = new BookListAsyncTask();
-                    asyncTask.execute(JSON_RESPONSE_URL);
+                        BookListAsyncTask asyncTask = new BookListAsyncTask();
+                        asyncTask.execute(JSON_RESPONSE_URL);
+                    } else {
+                        textView.setText("No internet connection");
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                    }
+
                 } else {
-                    textView.setText("No internet connection");
+                    textView.setText("Please enter keyword");
                     progressBar.setVisibility(View.INVISIBLE);
-
                 }
-
             }
+
         });
+    }
+
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
     private class BookListAsyncTask extends AsyncTask <String,Void,ArrayList<BookList>> {
