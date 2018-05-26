@@ -1,5 +1,6 @@
 package com.example.liveharshit.booklistingapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -45,9 +47,12 @@ public class MainActivity extends AppCompatActivity {
         adapter = new BookListAdapter(this,new ArrayList<BookList>());
         listView.setAdapter(adapter);
 
+
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 progressBar = (ProgressBar) findViewById(R.id.progress_bar);
                 TextView textView = (TextView) findViewById(R.id.empty_view);
                 textView.setText(null);
@@ -80,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
     }
+
 
     boolean doubleBackToExitPressedOnce = false;
 
